@@ -57,7 +57,7 @@ const Register = () => {
 
   return (
     <div className="form-container" style={{ 
-      background: 'url("https://t3.ftcdn.net/jpg/08/68/51/04/360_F_868510427_vsvN67LV1zSmLMyXMOFG05tRCmTAj1xL.jpg")', 
+      background: 'url("https://d39l2hkdp2esp1.cloudfront.net/img/photo/180199/180199_00_2x.jpg")', 
       backgroundSize: 'cover', 
       backgroundPosition: 'center', 
       backgroundRepeat: 'no-repeat',
@@ -70,7 +70,7 @@ const Register = () => {
         padding: '20px', 
         borderRadius: '10px', 
         boxShadow: '0 0 10px rgba(0,0,0,0.1)', 
-        backgroundColor: 'rgba(255,255,255,0.4)', 
+        backgroundColor: 'rgba(0,0,0,0.5)', 
         border: '1px solid #ddd', 
       }}>
         <h2 style={{ 
@@ -78,7 +78,7 @@ const Register = () => {
           marginBottom: '20px', 
           fontSize: '24px', 
           fontWeight: 'bold', 
-          color: '#333' 
+          color: 'white' 
         }}>Register</h2>
         <form onSubmit={handleSubmit} style={{ 
           display: 'flex', 
@@ -196,7 +196,7 @@ const Register = () => {
             padding: '10px 20px', 
             borderRadius: '5px', 
             border: 'none', 
-            backgroundColor: '#007bff', 
+            backgroundColor: '#C11C84', 
             color: 'white', 
             cursor: 'pointer', 
             fontSize: '16px', 
