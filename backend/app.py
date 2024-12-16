@@ -9,111 +9,20 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 from models.skin_tone.skin_tone_knn import identify_skin_tone
-from flask import Flask, request, jsonify, session
+from flask import Flask, request
 from flask_restful import Api, Resource, reqparse, abort
 import werkzeug
 from models.recommender.rec import recs_essentials, makeup_recommendation
 import base64
 from io import BytesIO
 from PIL import Image
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-
-
 
 app = Flask(__name__)
 api = Api(app)
 
-
-
-# Set up the database URI
-basedir = os.path.abspath(os.path.dirname(__file__))  # Current directory
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "users.db")}'
-app.config['SECRET_KEY'] = 'hvghjnkmkm456bnjkm5678hb'
-app.config['SESSION_TYPE'] = 'filesystem'
-
-
-
-# Initialize the database
-db = SQLAlchemy(app)
-CORS(app, supports_credentials=True)
-
-
-
-
 class_names1 = ['Dry_skin', 'Normal_skin', 'Oil_skin']
 class_names2 = ['Low', 'Moderate', 'Severe']
 skin_tone_dataset = 'models/skin_tone/skin_tone_dataset.csv'
-
-
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    
-    
-@app.before_request
-def create_tables():
-    if not db.engine.dialect.has_table(db.session.bind, 'user'):
-        db.create_all()
-    
-    
-    
-# Register endpoint
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    # Check if the user already exists
-    if User.query.filter_by(username=username).first():
-        return jsonify({"message": "User already exists"}), 400
-
-    # Add the new user to the database
-    new_user = User(username=username, password=password)
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"message": "User registered successfully"}), 201
-
-# Login endpoint
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    # Check if the username and password match
-    user = User.query.filter_by(username=username, password=password).first()
-    if user:
-        session['user_id'] = user.id
-        return jsonify({"message": "Login successful"}), 200
-
-    return jsonify({"message": "Invalid username or password"}), 401
-
-# Logout endpoint
-@app.route('/logout', methods=['POST'])
-def logout():
-    session.pop('user_id', None)
-    return jsonify({"message": "Logout successful"}), 200
-
-# Check login status
-@app.route('/status', methods=['GET'])
-def status():
-    if 'user_id' in session:
-        return jsonify({"logged_in": True}), 200
-    return jsonify({"logged_in": False}), 200
-
-
-
-
-
-
-
-
-
 
 
 def get_model():
